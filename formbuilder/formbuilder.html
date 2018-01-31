@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width"/>
+		<style>
+			textarea{
+				width:100%;
+				max-width:280px;
+				min-height:4rem;
+				display:block;
+				margin:1rem 0;
+			}
+			
+			[type=submit]{
+				margin-bottom:.75rem;
+			}
+		</style>
+	</head>
+	<body>
+		<h3>JavaScript Form Builder</h3>
+		<p>This app takes a JSON array of HTML inputs and creates valid HTML from them.</p>
+		<p>An example of a valid JSON string is: [{"type":"text"}]. This would output &lt;input type="text" /&gt;</p>
+		<form name="formBuilder" action="" method="post">
+			<label>JSON</label>
+			<br/>
+			<textarea name="input"></textarea>
+			
+			<input type="submit" value="Create Elements" />
+		</form>
+		
+		<label>Output</label>
+		
+		<textarea id="output"></textarea>
+	
+		<script>
+			var formBuilder = document.forms['formBuilder'],
+				output = document.getElementById('output');
+			
+			formBuilder.addEventListener('submit', function(e){
+				
+				//don't actually submit the form
+				e.preventDefault();
+				e.stopPropagation();
+				
+				if(!this.input.value) return; //don't bother executing any more code unless we have this
+				
+				
+				//attempt to parse input as JSON, and end code execution if it fails
+				try{
+					var inputArray = JSON.parse(this.input.value);
+				}
+				catch(e){
+					alert("Invalid JSON array. Please use format [{\"type\":\"text\"},{\"type\":\"password\"}]...");
+					
+					return;
+				}
+				
+				if(!inputArray) return; //for safety
+				
+				output.value = '';
+				
+				for(var x = 0; x < inputArray.length; x++){
+					output.value += '<input type="'+inputArray[x].type+'" />\n';
+				}
+			});
+		</script>
+	</body>
+</html>

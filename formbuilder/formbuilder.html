@@ -45,10 +45,36 @@
 				
 				if(!this.input.value) return; //don't bother executing any more code unless we have this
 				
-				
 				//attempt to parse input as JSON, and end code execution if it fails
 				try{
 					var inputArray = JSON.parse(this.input.value);
+					var validFields = [];
+
+					// Converts object for comparison
+					function objectConverter(a) {
+						var o = {};
+						for(var i=0;i<a.length;i++) {
+							o[a[i]]='';
+						}
+						return o;
+					}
+
+					// Looping through inputArray to compare input type with valid types
+					inputArray.forEach(element => {
+
+						// If statement that uses object converter function to compare input type with valid types
+						if( element.type in objectConverter(['button', 'checkbox', 'color', 'date', 'datetime-local', 'email', 'file', 'hidden', 'image', 'month', 'number', 'password', 'radio', 'range', 'reset', 'search', 'submit', 'tel', 'text', 'time', 'url', 'week']) ) {
+							
+							// If input is a valid type it is pushed to validFields array
+							validFields.push(element);
+
+						} else {
+
+							// If tpye is not valid it will alert user and end
+							alert('Sorry Invalid Input Type: ' + element.type);
+							return;
+						}
+					});
 				}
 				catch(e){
 					alert("Invalid JSON array. Please use format [{\"type\":\"text\"},{\"type\":\"password\"}]...");
@@ -56,12 +82,14 @@
 					return;
 				}
 				
-				if(!inputArray) return; //for safety
+				// Passing validFields array to see if it exists for safety
+				if(!validFields) return; //for safety
 				
 				output.value = '';
 				
-				for(var x = 0; x < inputArray.length; x++){
-					output.value += '<input type="'+inputArray[x].type+'" />\n';
+				// Looping through validFields array and output the inputs
+				for(var x = 0; x < validFields.length; x++){
+					output.value += '<input type="'+validFields[x].type+'" />\n';
 				}
 			});
 		</script>

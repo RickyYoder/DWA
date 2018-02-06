@@ -34,9 +34,9 @@
 		<textarea id="output"></textarea>
 	
 		<script>
-			var formBuilder = document.forms['formBuilder'],
-				output = document.getElementById('output');
-			
+			const formBuilder = document.forms['formBuilder'],
+				  output = document.getElementById('output');
+
 			formBuilder.addEventListener('submit', function(e){
 				
 				//don't actually submit the form
@@ -45,10 +45,11 @@
 				
 				if(!this.input.value) return; //don't bother executing any more code unless we have this
 				
+				let inputArray = JSON.parse(this.input.value),
+					validFields = [];
+				
 				//attempt to parse input as JSON, and end code execution if it fails
 				try{
-					var inputArray = JSON.parse(this.input.value);
-					var validFields = [];
 
 					// Converts object for comparison
 					function objectConverter(a) {
@@ -88,7 +89,7 @@
 				output.value = '';
 				
 				// Looping through validFields array and output the inputs
-				for(var x = 0; x < validFields.length; x++){
+				for(let x = 0; x < validFields.length; x++){
 					output.value += '<input type="'+validFields[x].type+'" />\n';
 				}
 			});
